@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
+from routers import doctors, reports
 
 Base.metadata.create_all(bind=engine)
 
@@ -12,6 +13,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(doctors.router, prefix="/api/doctors", tags=["doctors"])
+app.include_router(reports.router, prefix="/api/reports", tags=["reports"])
 
 @app.get("/api/health")
 def health():
