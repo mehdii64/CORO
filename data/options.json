@@ -1,0 +1,90 @@
+{
+  "rooms": [
+    "GE Innova",
+    "Philips Azurion"
+  ],
+  "approaches": [
+    "Artère radiale droite",
+    "Artère radiale gauche",
+    "Artère fémorale droite",
+    "Artère fémorale gauche"
+  ],
+  "french_sizes": [
+    5,
+    6,
+    7,
+    8
+  ],
+  "material": [
+    "0.035 (Abbott Laboratories)",
+    "FR 4 (Boston Scientific)",
+    "IMPULSE 5F JL 3.5 (Boston Scientific)",
+    "Introducer Fémoral 6F (Terumo)",
+    "EBU 3.5 6F (Medtronic)",
+    "JR 4 6F (Boston Scientific)",
+    "Guide de coronarographie 0.035 (ABBOTT LABORATORIES)",
+    "L'artère circonflexe est de bon calibre elle donne naissance à deux branches marginales. La Cx proximale est le siège d’une lésion intermédiaire (< 50%) avec un flux coronaire antérograde normal ( TIMI 3 ) ",
+    "INTRODUCTEUR Radial 6F (Terumo)",
+    "Launcher guiding catheter EBU 3.75 (Medtronic)",
+    "FL 3.5 (Boston Scientific)",
+    "SAMURAI 0.014 STRAIGHT TIP (Boston Scientific)",
+    "0.035 (ABBOTT LABORATORIES)",
+    "Lésion serrée  du TCG ( 50 – 70 % ) ",
+    "Lésion significative  du TCG ( 50 – 70 % ) ",
+    "Introducer RADIAL 6F (Terumo)",
+    "Lésion subocclusive  de la premiere marginale avec un flux coronaire antérograde TIMI 3. ( lésion similaire à la coronarographie antérieure datant de 1 mois ) ",
+    "Lésion serrée de la deuxieme marginale  avec un flux coronaire antérograde TIMI 3. ( lésion similaire à la coronarographie antérieure datant de 1 mois ) ",
+    "FL 4 (Boston Scientific)",
+    "INTRODUCTEUR Radial 5F (Terumo)",
+    "Occlusion totale de la RVP juste après son départ, sans flux coronaire antérograde (TIMI 0), sans reprise coronaire (Rentrop 0)",
+    "Guide 0.014 SAMURAI Straight TIP (Boston Scientific)",
+    "L’artère circonflexe distale est le siège d’une lésion intermédiaire (< 50%) avec un flux coronaire antérograde normal ( TIMI 3 ) ",
+    "L'artère interventriculaire antérieure est de bon calibre dans sa partie proximale . Elle présente au niveau de son segment proximal une lésion serrée (70-90%) d’aspect thrombotique sans flux coronaire antérograde (TIMI 0 ) ",
+    "Occlusion de l'artère interventriculaire antérieure proximale d'aspect thrombotique, englobant l'origine de la première diagonale avec un flux coronaire antérograde anormal (TIMI0)",
+    "La première marginale est le siège d’une lésion serrée (70%) avec un flux coronaire antérograde normal (TIMI3)"
+  ],
+  "indications": [
+    "STEMI",
+    "NSTEMI",
+    "Angor stable",
+    "Angor instable",
+    "Bilan préopératoire",
+    "Bilan de routine",
+    "Cardiomyopathie",
+    "STEMI LIKE",
+    "Bilan de dysfonction VG",
+    "Angor d’effort",
+    "NSTEMI sur terrain de CMH",
+    "STEMI en ASA à H24"
+  ],
+  "fdrcx": [
+    "HTA",
+    "DT2",
+    "Dyslipidémie",
+    "Tabac actif",
+    "Tabac sevré",
+    "Obésité",
+    "Hérédité coronarienne"
+  ],
+  "ecg_findings": [
+    "RRS",
+    "FA",
+    "BBG",
+    "BBD",
+    "Sus-décalage ST",
+    "Sous-décalage ST",
+    "Ondes Q",
+    "Troubles de la repolarisation"
+  ],
+  "decisions": [
+    "Traitement médical optimisé",
+    "Angioplastie (ATC)",
+    "Revascularisation chirurgicale",
+    "FFR à prévoir",
+    "IVUS à prévoir",
+    "ATL de l’IVA",
+    "Revascularisation chirurgicale ",
+    "Prévoir ATL de la marginale",
+    "Test de viabilité sur le territoire de la coronaire droite"
+  ]
+}
