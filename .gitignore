@@ -4,3 +4,4 @@ node_modules/
 dist/
 *.db
 *.pyc
+data/atc_samples/
