@@ -36,6 +36,7 @@ class ClinicalStatusCreate(BaseModel):
     ecg: str = ""
     ett_fevg: Optional[float] = None
     ett_notes: str = ""
+    ett_kinetics: str = ""
 
 class ClinicalStatusOut(ClinicalStatusCreate):
     id: int
@@ -62,6 +63,7 @@ class LesionCreate(BaseModel):
     good_distal_bed: bool = True
     notes: str = ""
     position: int = 0
+    occlusion_type: str = ""
 
 class LesionOut(LesionCreate):
     id: int
@@ -78,9 +80,34 @@ class ConclusionOut(ConclusionCreate):
     report_id: int
     model_config = {"from_attributes": True}
 
+class InterventionCreate(BaseModel):
+    artery: str = ""
+    lesion_summary: str = ""
+    guide_catheter: str = ""
+    wires: str = "[]"
+    predilation: bool = False
+    predilation_balloon: str = ""
+    predilation_pressure: str = ""
+    stents: str = "[]"
+    postdilation: bool = False
+    postdilation_balloon: str = ""
+    postdilation_pressure: str = ""
+    final_timi: int = 3
+    success: bool = True
+    complications: str = ""
+    notes: str = ""
+    position: int = 0
+
+class InterventionOut(InterventionCreate):
+    id: int
+    report_id: int
+    model_config = {"from_attributes": True}
+
+
 class FullReport(BaseModel):
     report: ReportOut
     clinical: Optional[ClinicalStatusOut] = None
     technique: Optional[TechniqueOut] = None
     lesions: list[LesionOut] = []
     conclusion: Optional[ConclusionOut] = None
+    interventions: list[InterventionOut] = []

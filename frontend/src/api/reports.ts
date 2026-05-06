@@ -19,6 +19,12 @@ export const api = {
     fetch(`${BASE}/reports/${rid}/lesions/${lid}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }).then(r => r.json()),
   deleteLesion: (rid: number, lid: number) =>
     fetch(`${BASE}/reports/${rid}/lesions/${lid}`, { method: "DELETE" }),
+  addIntervention: (id: number, data: object) =>
+    fetch(`${BASE}/reports/${id}/interventions`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }).then(r => r.json()),
+  updateIntervention: (rid: number, iid: number, data: object) =>
+    fetch(`${BASE}/reports/${rid}/interventions/${iid}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }).then(r => r.json()),
+  deleteIntervention: (rid: number, iid: number) =>
+    fetch(`${BASE}/reports/${rid}/interventions/${iid}`, { method: "DELETE" }),
   deleteReport: (id: number) => fetch(`${BASE}/reports/${id}`, { method: "DELETE" }),
   exportDocx: (id: number) => window.open(`${BASE}/export/${id}`, "_blank"),
   getDoctors: () => fetch(`${BASE}/doctors`).then(r => r.json()),

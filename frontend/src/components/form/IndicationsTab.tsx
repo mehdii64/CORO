@@ -6,6 +6,8 @@ interface Props {
   options: Options; doctors: Doctor[]; reportId: number
 }
 
+const inputCls = "border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white w-full"
+
 export default function IndicationsTab({ full, setFull, options, reportId }: Props) {
   const indication = full.report.indication || ""
   const parts = indication.split(", ").filter(Boolean)
@@ -24,25 +26,38 @@ export default function IndicationsTab({ full, setFull, options, reportId }: Pro
   }
 
   return (
-    <div className="max-w-lg space-y-4">
-      <h2 className="text-lg font-semibold">Indications</h2>
-      <div className="grid grid-cols-2 gap-2">
-        {options.indications.map(item => (
-          <label key={item} className="flex items-center gap-2 text-sm">
-            <input type="checkbox"
-              checked={parts.includes(item)}
-              onChange={() => toggleIndication(item)} />
-            {item}
-          </label>
-        ))}
+    <div className="space-y-6">
+      <h2 className="text-lg font-semibold text-slate-800">Indications</h2>
+
+      <div className="bg-white rounded-xl border border-slate-200 p-5">
+        <p className="text-sm font-semibold text-slate-700 mb-3">Motif de l'examen</p>
+        <div className="grid grid-cols-2 gap-y-2 gap-x-6">
+          {options.indications.map(item => (
+            <label key={item} className="flex items-center gap-3 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                checked={parts.includes(item)}
+                onChange={() => toggleIndication(item)}
+                className="w-4 h-4 rounded border-slate-300 text-blue-700 focus:ring-blue-600"
+              />
+              <span className="text-slate-700">{item}</span>
+            </label>
+          ))}
+        </div>
       </div>
-      <label className="flex flex-col text-sm">
-        <span className="text-gray-600 mb-1">Précisions / autre</span>
-        <textarea rows={2}
-          defaultValue={indication}
-          onBlur={e => setFreeText(e.target.value)}
-          className="border rounded px-2 py-1" />
-      </label>
+
+      <div className="bg-white rounded-xl border border-slate-200 p-5">
+        <label className="flex flex-col gap-2">
+          <span className="text-sm font-semibold text-slate-700">Précisions / autre indication</span>
+          <textarea
+            rows={3}
+            defaultValue={indication}
+            onBlur={e => setFreeText(e.target.value)}
+            className={inputCls}
+            placeholder="Saisir une indication particulière…"
+          />
+        </label>
+      </div>
     </div>
   )
 }

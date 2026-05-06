@@ -35,6 +35,7 @@ class ClinicalStatus(Base):
     ecg = Column(Text, default="")
     ett_fevg = Column(Float, nullable=True)
     ett_notes = Column(Text, default="")
+    ett_kinetics = Column(Text, default="")
 
 class Technique(Base):
     __tablename__ = "technique"
@@ -57,6 +58,8 @@ class Lesion(Base):
     good_distal_bed = Column(Boolean, default=True)
     notes = Column(Text, default="")
     position = Column(Integer, default=0)
+    # For 100% lesions: "" (unspecified), "aigue" (acute), or "chronique" (CTO)
+    occlusion_type = Column(String, default="")
 
 class Conclusion(Base):
     __tablename__ = "conclusion"
@@ -65,3 +68,35 @@ class Conclusion(Base):
     trunk_disease = Column(String, default="normal")
     decision = Column(String, default="")
     decision_notes = Column(Text, default="")
+
+class Intervention(Base):
+    """One angioplasty (ATC) procedure on a single artery/segment."""
+    __tablename__ = "interventions"
+    id = Column(Integer, primary_key=True)
+    report_id = Column(Integer, ForeignKey("reports.id", ondelete="CASCADE"))
+    position = Column(Integer, default=0)
+    artery = Column(String, nullable=False, default="")  # e.g. "CD II", "IVA moyenne", "TCG-IVA"
+    lesion_summary = Column(String, default="")  # short description used in narrative
+
+    # Material
+    guide_catheter = Column(String, default="")     # e.g. "JR4 6F (Medtronic)"
+    wires = Column(Text, default="[]")              # JSON list of 0.014 wires used
+
+    # Pre-dilatation
+    predilation = Column(Boolean, default=False)
+    predilation_balloon = Column(String, default="")
+    predilation_pressure = Column(String, default="")  # free text e.g. "8 ATM x 20 sec"
+
+    # Stents (JSON list of dicts: {name, diameter, length, manufacturer, pressure, type, position})
+    stents = Column(Text, default="[]")
+
+    # Post-dilatation
+    postdilation = Column(Boolean, default=False)
+    postdilation_balloon = Column(String, default="")
+    postdilation_pressure = Column(String, default="")
+
+    # Result
+    final_timi = Column(Integer, default=3)
+    success = Column(Boolean, default=True)
+    complications = Column(Text, default="")
+    notes = Column(Text, default="")  # free text appended to narrative

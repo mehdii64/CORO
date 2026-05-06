@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom"
 import { api } from "../api/reports"
 import type { Doctor, Options } from "../types"
 
+const cardCls = "bg-white rounded-xl border border-slate-200 p-5"
+const inputCls = "border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white w-full"
+
 export default function Settings() {
   const nav = useNavigate()
   const [doctors, setDoctors] = useState<Doctor[]>([])
@@ -53,21 +56,31 @@ export default function Settings() {
   ]
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-8">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Configuration</h1>
-        <button onClick={() => nav("/")} className="text-blue-600 hover:underline text-sm">← Retour</button>
+    <div className="max-w-2xl mx-auto px-6 py-8 space-y-6">
+      <div className="flex items-center gap-3 mb-2">
+        <button onClick={() => nav("/")} className="text-slate-500 hover:text-slate-700 transition-colors">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <h1 className="text-2xl font-bold text-slate-900">Configuration</h1>
       </div>
 
       {/* Médecins */}
-      <section>
-        <h2 className="text-lg font-semibold mb-3">Médecins du service</h2>
-        <div className="space-y-2 mb-3">
+      <div className={cardCls}>
+        <h2 className="text-base font-semibold text-slate-800 mb-4">Médecins du service</h2>
+        <div className="space-y-1 mb-4">
           {doctors.map(d => (
-            <div key={d.id} className="flex items-center justify-between border rounded px-3 py-2">
-              <span className={`text-sm ${!d.active ? "text-gray-400 line-through" : ""}`}>{d.name}</span>
-              <button onClick={() => toggleDoctorActive(d)}
-                className="text-xs text-blue-600 hover:underline">
+            <div key={d.id} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+              <span className={`text-sm ${!d.active ? "text-slate-400 line-through" : "text-slate-700"}`}>{d.name}</span>
+              <button
+                onClick={() => toggleDoctorActive(d)}
+                className={`text-xs font-medium px-3 py-1 rounded-full transition-colors ${
+                  d.active
+                    ? "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    : "bg-green-100 text-green-700 hover:bg-green-200"
+                }`}
+              >
                 {d.active ? "Désactiver" : "Réactiver"}
               </button>
             </div>
@@ -79,25 +92,31 @@ export default function Settings() {
             onChange={e => setNewDoctorName(e.target.value)}
             onKeyDown={e => e.key === "Enter" && addDoctor()}
             placeholder="Dr Nom Prénom"
-            className="border rounded px-2 py-1 text-sm flex-1"
+            className={inputCls}
           />
-          <button onClick={addDoctor}
-            className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+          <button
+            onClick={addDoctor}
+            className="bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800 transition-colors shrink-0"
+          >
             Ajouter
           </button>
         </div>
-      </section>
+      </div>
 
       {/* Listes éditables */}
       {options && editableKeys.map(({ key, label }) => (
-        <section key={key as string}>
-          <h2 className="text-lg font-semibold mb-2">{label}</h2>
-          <div className="space-y-1 mb-2">
+        <div key={key as string} className={cardCls}>
+          <h2 className="text-base font-semibold text-slate-800 mb-4">{label}</h2>
+          <div className="space-y-1 mb-4">
             {(options[key] as string[]).map((item: string) => (
-              <div key={item} className="flex items-center justify-between text-sm border-b py-1">
-                <span>{item}</span>
-                <button onClick={() => removeOptionItem(key, item)}
-                  className="text-red-400 hover:text-red-600 text-xs">Supprimer</button>
+              <div key={item} className="flex items-center justify-between py-1.5 border-b border-slate-100 last:border-0">
+                <span className="text-sm text-slate-700">{item}</span>
+                <button
+                  onClick={() => removeOptionItem(key, item)}
+                  className="text-xs text-red-400 hover:text-red-600 transition-colors font-medium"
+                >
+                  Supprimer
+                </button>
               </div>
             ))}
           </div>
@@ -107,12 +126,16 @@ export default function Settings() {
               onChange={e => setNewItem(prev => ({ ...prev, [key]: e.target.value }))}
               onKeyDown={e => e.key === "Enter" && addOptionItem(key)}
               placeholder="Nouvelle entrée…"
-              className="border rounded px-2 py-1 text-sm flex-1"
+              className={inputCls}
             />
-            <button onClick={() => addOptionItem(key)}
-              className="bg-gray-200 px-3 py-1 rounded text-sm hover:bg-gray-300">+</button>
+            <button
+              onClick={() => addOptionItem(key)}
+              className="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors shrink-0"
+            >
+              +
+            </button>
           </div>
-        </section>
+        </div>
       ))}
     </div>
   )

@@ -14,9 +14,12 @@ def export_report(report_id: int, db: Session = Depends(get_db)):
     if not r:
         raise HTTPException(404)
 
+    # Preserve the order in which operators were checked.
     operator_ids = json.loads(r.operators or "[]")
-    doctors = db.query(models.Doctor).filter(models.Doctor.id.in_(operator_ids)).all()
-    doctor_names = [d.name for d in doctors]
+    doctors_by_id = {
+        d.id: d for d in db.query(models.Doctor).filter(models.Doctor.id.in_(operator_ids)).all()
+    }
+    doctor_names = [doctors_by_id[i].name for i in operator_ids if i in doctors_by_id]
 
     full = schemas.FullReport(
         report=r,
@@ -24,6 +27,7 @@ def export_report(report_id: int, db: Session = Depends(get_db)):
         technique=db.query(models.Technique).filter_by(report_id=report_id).first(),
         lesions=db.query(models.Lesion).filter_by(report_id=report_id).order_by(models.Lesion.position).all(),
         conclusion=db.query(models.Conclusion).filter_by(report_id=report_id).first(),
+        interventions=db.query(models.Intervention).filter_by(report_id=report_id).order_by(models.Intervention.position).all(),
     )
     full_dict = full.model_dump()
     full_dict["doctor_names"] = doctor_names
@@ -31,7 +35,7 @@ def export_report(report_id: int, db: Session = Depends(get_db)):
     buf = build_docx(full_dict)
     name = (r.patient_name or "PATIENT").upper().replace(" ", "_")
     date = (r.exam_date or "").replace("-", "_")
-    filename = f"Coro_{name}_{date}_{r.ipp or 'IPP'}.docx"
+    filename = f"Coro_{name}_{date}.docx"
 
     return StreamingResponse(
         buf,

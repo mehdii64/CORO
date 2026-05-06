@@ -9,6 +9,8 @@ interface Props {
   reportId: number
 }
 
+const inputCls = "border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white w-full"
+
 export default function HeaderTab({ full, setFull, doctors, reportId }: Props) {
   const r = full.report
   const operatorIds: number[] = JSON.parse(r.operators || "[]")
@@ -27,43 +29,55 @@ export default function HeaderTab({ full, setFull, doctors, reportId }: Props) {
   }
 
   return (
-    <div className="max-w-xl space-y-4">
-      <h2 className="text-lg font-semibold">En-tête du compte rendu</h2>
+    <div className="space-y-6">
+      <h2 className="text-lg font-semibold text-slate-800">En-tête du compte rendu</h2>
 
-      <div className="grid grid-cols-2 gap-3">
-        {([
-          ["Nom complet", "patient_name", "text"],
-          ["Date de naissance", "dob", "date"],
-          ["IPP", "ipp", "text"],
-          ["Date examen", "exam_date", "date"],
-        ] as const).map(([label, field, type]) => (
-          <label key={field} className="flex flex-col text-sm">
-            <span className="text-gray-600 mb-1">{label}</span>
-            <input type={type}
-              defaultValue={(r as Record<string, string>)[field] ?? ""}
-              onBlur={e => save(field, e.target.value)}
-              className="border rounded px-2 py-1" />
+      <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <label className="flex flex-col gap-1">
+            <span className="text-sm font-medium text-slate-700">Nom complet du patient</span>
+            <input
+              type="text"
+              defaultValue={r.patient_name ?? ""}
+              onBlur={e => save("patient_name", e.target.value)}
+              className={inputCls}
+            />
           </label>
-        ))}
-        <label className="flex flex-col text-sm">
-          <span className="text-gray-600 mb-1">Sexe</span>
-          <select defaultValue={r.sex}
-            onChange={e => save("sex", e.target.value)}
-            className="border rounded px-2 py-1">
-            <option>Masculin</option><option>Féminin</option>
-          </select>
-        </label>
+          <label className="flex flex-col gap-1">
+            <span className="text-sm font-medium text-slate-700">Date</span>
+            <input
+              type="date"
+              defaultValue={r.exam_date ?? ""}
+              onBlur={e => save("exam_date", e.target.value)}
+              className={inputCls}
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            <span className="text-sm font-medium text-slate-700">Sexe</span>
+            <select
+              defaultValue={r.sex}
+              onChange={e => save("sex", e.target.value)}
+              className={inputCls}
+            >
+              <option>Masculin</option>
+              <option>Féminin</option>
+            </select>
+          </label>
+        </div>
       </div>
 
-      <div>
-        <p className="text-sm text-gray-600 mb-2 font-medium">Opérateurs</p>
-        <div className="flex flex-col gap-1">
+      <div className="bg-white rounded-xl border border-slate-200 p-5">
+        <p className="text-sm font-semibold text-slate-700 mb-3">Opérateurs</p>
+        <div className="grid grid-cols-2 gap-2">
           {doctors.filter(d => d.active).map(d => (
-            <label key={d.id} className="flex items-center gap-2 text-sm">
-              <input type="checkbox"
+            <label key={d.id} className="flex items-center gap-3 text-sm cursor-pointer">
+              <input
+                type="checkbox"
                 checked={operatorIds.includes(d.id)}
-                onChange={() => toggleOperator(d.id)} />
-              {d.name}
+                onChange={() => toggleOperator(d.id)}
+                className="w-4 h-4 rounded border-slate-300 text-blue-700 focus:ring-blue-600"
+              />
+              <span className="text-slate-700">{d.name}</span>
             </label>
           ))}
         </div>
