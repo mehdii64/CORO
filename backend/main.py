@@ -1,27 +1,14 @@
 import os
+import json
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import text
 from database import Base, engine, SessionLocal
 from routers import doctors, reports, options, export
 import models
 
 Base.metadata.create_all(bind=engine)
 
-
-def _ensure_column(table: str, column: str, ddl: str) -> None:
-    with engine.connect() as conn:
-        cols = [r[1] for r in conn.execute(text(f"PRAGMA table_info({table})")).fetchall()]
-        if column not in cols:
-            conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {ddl}"))
-            conn.commit()
-
-
-_ensure_column("clinical_status", "ett_kinetics", "TEXT DEFAULT ''")
-_ensure_column("lesions", "occlusion_type", "VARCHAR DEFAULT ''")
-
-
-# Seed default doctors on startup if missing
 DEFAULT_DOCTORS = [
     "Dr Najlaa Belharty",
     "Pr Fennich Nada",
@@ -36,11 +23,20 @@ DEFAULT_DOCTORS = [
     "Dr Idriss Haddioui",
     "Dr Allalat Idriss",
 ]
+
+_OPTIONS_FILE = Path(__file__).parent / "data" / "options.json"
+
 _db = SessionLocal()
 try:
     for _name in DEFAULT_DOCTORS:
         if not _db.query(models.Doctor).filter_by(name=_name).first():
             _db.add(models.Doctor(name=_name, active=True))
+
+    _default_opts = json.loads(_OPTIONS_FILE.read_text(encoding="utf-8"))
+    for _key, _val in _default_opts.items():
+        if not _db.get(models.OptionStore, _key):
+            _db.add(models.OptionStore(key=_key, value=json.dumps(_val, ensure_ascii=False)))
+
     _db.commit()
 finally:
     _db.close()

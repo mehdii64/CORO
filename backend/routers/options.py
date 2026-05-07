@@ -1,19 +1,21 @@
 import json
-from pathlib import Path
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from database import get_db
+import models
 
 router = APIRouter()
-OPTIONS_PATH = Path(__file__).parent.parent.parent / "data" / "options.json"
 
 @router.get("/")
-def get_options():
-    return json.loads(OPTIONS_PATH.read_text(encoding="utf-8"))
+def get_options(db: Session = Depends(get_db)):
+    rows = db.query(models.OptionStore).all()
+    return {r.key: json.loads(r.value) for r in rows}
 
 @router.put("/{key}")
-def update_option_list(key: str, items: list[str]):
-    opts = json.loads(OPTIONS_PATH.read_text(encoding="utf-8"))
-    if key not in opts:
+def update_option_list(key: str, items: list, db: Session = Depends(get_db)):
+    obj = db.get(models.OptionStore, key)
+    if not obj:
         raise HTTPException(404, f"Option key '{key}' not found")
-    opts[key] = items
-    OPTIONS_PATH.write_text(json.dumps(opts, ensure_ascii=False, indent=2), encoding="utf-8")
-    return opts
+    obj.value = json.dumps(items, ensure_ascii=False)
+    db.commit()
+    return json.loads(obj.value)

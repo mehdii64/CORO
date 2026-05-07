@@ -1,6 +1,11 @@
 from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Text
 from database import Base
 
+class OptionStore(Base):
+    __tablename__ = "option_store"
+    key = Column(String, primary_key=True)
+    value = Column(Text, nullable=False)  # JSON-encoded list or scalar
+
 class Doctor(Base):
     __tablename__ = "doctors"
     id = Column(Integer, primary_key=True, index=True)
