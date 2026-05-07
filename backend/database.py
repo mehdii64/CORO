@@ -2,7 +2,12 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./coro.db")
+# Vercel Postgres injects POSTGRES_URL; fallback to DATABASE_URL then local SQLite
+DATABASE_URL = (
+    os.getenv("POSTGRES_URL")
+    or os.getenv("DATABASE_URL")
+    or "sqlite:///./coro.db"
+)
 
 # Neon / Vercel Postgres returns postgres:// but SQLAlchemy needs postgresql://
 if DATABASE_URL.startswith("postgres://"):
