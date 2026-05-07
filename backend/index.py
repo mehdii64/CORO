@@ -1,4 +1,7 @@
-from main import app
-from mangum import Mangum
+from fastapi import FastAPI
 
-handler = Mangum(app, lifespan="off")
+app = FastAPI()
+
+@app.get("/api/health")
+def health():
+    return {"status": "ok", "msg": "minimal test"}
