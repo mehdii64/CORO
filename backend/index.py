@@ -2,20 +2,20 @@ import os
 import traceback
 from fastapi import FastAPI
 
-debug_app = FastAPI()
+app = FastAPI()  # top-level so Vercel's static analysis finds it
 _import_error = None
 
 try:
-    from main import app
+    import main as _main
+    app = _main.app
 except Exception:
     _import_error = traceback.format_exc()
-    app = debug_app
 
-@debug_app.get("/api/debug")
+@app.get("/api/debug")
 def debug():
     return {
         "error": _import_error,
         "cwd": os.getcwd(),
         "files": os.listdir("."),
-        "tmp": os.listdir("/tmp") if os.path.exists("/tmp") else "no /tmp",
+        "env_db": os.getenv("DATABASE_URL", "not set"),
     }
