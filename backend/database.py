@@ -7,7 +7,7 @@ DATABASE_URL = (
     os.getenv("POSTGRES_URL")
     or os.getenv("DATABASE_URL")
     or "sqlite:///./coro.db"
-)
+).lstrip("﻿")  # strip UTF-8 BOM if injected by the env var source
 
 # Neon / Vercel Postgres returns postgres:// but SQLAlchemy needs postgresql://
 if DATABASE_URL.startswith("postgres://"):
